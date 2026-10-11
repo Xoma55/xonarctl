@@ -1,0 +1,39 @@
+#!/bin/sh
+set -eu
+
+PARAM=/sys/module/snd_xonar_ae/parameters/output
+
+usage() {
+	printf 'Usage: %s {status|toggle|speakers|headphones}\n' "$0" >&2
+	exit 2
+}
+
+[ -r "$PARAM" ] || {
+	printf 'snd-xonar-ae is not loaded (or ASUS XONAR AE is unavailable)\n' >&2
+	exit 1
+}
+
+command=${1:-status}
+case "$command" in
+	status)
+		cat "$PARAM"
+		;;
+	speakers|headphones)
+		printf '%s\n' "$command" > "$PARAM"
+		cat "$PARAM"
+		;;
+	toggle)
+		current=$(cat "$PARAM")
+		case "$current" in
+			speakers) next=headphones ;;
+			headphones) next=speakers ;;
+			*)
+				printf 'Выход неизвестен; первый toggle выбирает колонки.\n' >&2
+				next=speakers
+				;;
+		esac
+		printf '%s\n' "$next" > "$PARAM"
+		cat "$PARAM"
+		;;
+	*) usage ;;
+esac

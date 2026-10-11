@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Переключить выход Xonar AE
+GenericName=Наушники или колонки
+Comment=Переключить физический выход звуковой карты ASUS Xonar AE
+Exec=pkexec /usr/local/bin/xonarctl toggle
+Icon=audio-card
+Terminal=false
+StartupNotify=false
+Categories=AudioVideo;Audio;
